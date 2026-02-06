@@ -1,4 +1,4 @@
-# X Trends Agent - Built with LangGraph
+# X Trends Agent - Built with LangGraph & Agent Stack SDK
 
 ## Introduction
 
