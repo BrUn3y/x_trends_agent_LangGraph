@@ -2,7 +2,7 @@ import os
 import asyncio
 from typing import AsyncGenerator, Annotated, TypedDict, List
 
-# --- Tus Imports de A2A y Agent Stack ---
+# --- A2A and Agent Stack Imports ---
 from a2a.types import AgentSkill, Message
 from a2a.utils.message import get_message_text
 from agentstack_sdk.server import Server
@@ -15,25 +15,25 @@ from langgraph.graph import StateGraph, END
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_ollama import ChatOllama
 
-# --- 1. Definición del Estado ---
+# --- 1. State Definition ---
 class AgentState(TypedDict):
     query: str
     trends: List[str]
     context_reports: List[str]
     final_report: str
 
-# --- 2. Definición de Nodos (Lógica del Agente) ---
+# --- 2. Node Definitions (Agent Logic) ---
 
-# Herramienta de búsqueda y LLM con Ollama
+# Search tool and local LLM with Ollama
 search_wrapper = DuckDuckGoSearchAPIWrapper()
-# Usamos el modelo granite4 solicitado
+# Using the requested granite4 model
 llm = ChatOllama(model="granite4:tiny-h") 
 
 async def analyze_and_get_trends(state: AgentState):
-    """Paso 1, 2 y 3: Identifica país, construye URL y extrae el top 5 de trends24.in"""
+    """Step 1, 2, and 3: Identify country, build URL, and extract top 5 from trends24.in"""
     query = state['query']
     
-    # 1. Analizar si hay un país mencionado
+    # 1. Analyze if a country is mentioned
     country_prompt = (
         "Identify if a specific country is mentioned in the following user query. "
         "Return only the country name in English (lowercase), or 'global' if no country is specified. "
@@ -43,13 +43,13 @@ async def analyze_and_get_trends(state: AgentState):
     country_res = await llm.ainvoke(country_prompt)
     country = country_res.content.strip().lower().replace("'", "").replace('"', "")
     
-    # 2. Construir la URL de trends24.in
+    # 2. Build the trends24.in URL
     base_url = "https://trends24.in/"
     url = f"{base_url}{country}/" if country != "global" else base_url
     
-    print(f"--- [LangGraph] Buscando tendencias para el país: {country} en {url} ---")
+    print(f"--- [LangGraph] Searching for trends in country: {country} at {url} ---")
     
-    # 3. Obtener el top 5 de tendencias
+    # 3. Get the top 5 trends
     search_query = f"site:trends24.in top trending topics {country if country != 'global' else ''}"
     results = search_wrapper.results(search_query, max_results=5)
     
@@ -65,10 +65,10 @@ async def analyze_and_get_trends(state: AgentState):
     return {"trends": trends[:5]}
 
 async def research_trends_context(state: AgentState):
-    """Paso 4: Busca el 'por qué' de cada tendencia y captura la URL fuente"""
+    """Step 4: Search for the 'why' of each trend and capture the source URL"""
     reports = []
     for trend in state['trends']:
-        print(f"--- [LangGraph] Investigando contexto para: {trend} ---")
+        print(f"--- [LangGraph] Investigating context for: {trend} ---")
         context_query = f"why is {trend} trending news today source article"
         search_results = search_wrapper.results(context_query, max_results=3)
         
@@ -84,7 +84,7 @@ async def research_trends_context(state: AgentState):
     return {"context_reports": reports}
 
 async def synthesize_report(state: AgentState):
-    """Paso 5: Genera el reporte final amistoso, dinámico y con emojis"""
+    """Step 5: Generate the final friendly, dynamic report with emojis"""
     reports_text = "\n\n".join(state['context_reports'])
     
     final_prompt = (
@@ -97,7 +97,7 @@ async def synthesize_report(state: AgentState):
     final_res = await llm.ainvoke(final_prompt)
     return {"final_report": final_res.content.strip()}
 
-# --- 3. Construcción del Grafo ---
+# --- 3. Graph Construction ---
 
 workflow = StateGraph(AgentState)
 
@@ -112,17 +112,17 @@ workflow.add_edge("synthesize", END)
 
 app = workflow.compile()
 
-# --- 4. Configuración de Agent Stack ---
+# --- 4. Agent Stack Configuration ---
 
 AGENT_DETAIL = AgentDetail(
     interaction_mode="multi-turn",
-    user_greeting="¡Hola! Soy tu analista amigo de tendencias en X (ex-Twitter). Pregúntame sobre cualquier país.",
+    user_greeting="Hello! I'm your friendly X (formerly Twitter) trends analyst. Ask me about any country.",
     version="1.2.0",
     framework="LangGraph + Ollama",
     author={"name": "Edgar Bruney"},
     tools=[
-        AgentDetailTool(name="DuckDuckGo", description="Búsqueda web para tendencias en tiempo real."),
-        AgentDetailTool(name="Ollama (DeepSeek)", description="Cerebro local para análisis dinámico.")
+        AgentDetailTool(name="DuckDuckGo", description="Web search for real-time trends."),
+        AgentDetailTool(name="Ollama (Granite)", description="Local brain for dynamic analysis.")
     ],
 )
 
@@ -130,22 +130,22 @@ AGENT_SKILLS = [
     AgentSkill(
         id="x-trends-ollama",
         name="X Trends Ollama Specialist",
-        description="Analiza tendencias de X por país usando modelos locales de Ollama.",
-        examples=["¿Qué es tendencia en México?", "Dime las tendencias globales."],
+        description="Analyzes X trends by country using local Ollama models.",
+        examples=["What's trending in Mexico?", "Tell me about global trends."],
         tags=["social-media", "trends", "x", "analysis", "ollama", "local-llm"]
     )
 ]
 
 server = Server()
 
-# --- 5. Handler del Servidor ---
+# --- 5. Server Handler ---
 
 @server.agent(name="X Trends Agent LangGraph", detail=AGENT_DETAIL, skills=AGENT_SKILLS)
 async def langgraph_trends_agent(input: Message, context: RunContext) -> AsyncGenerator[AgentMessage, None]:
     user_query = get_message_text(input)
-    print(f"--- [LangGraph] Recibiendo query: '{user_query}' ---")
+    print(f"--- [LangGraph] Receiving query: '{user_query}' ---")
 
-    # Ejecutar el grafo
+    # Execute the graph
     initial_state = {"query": user_query, "trends": [], "context_reports": [], "final_report": ""}
     result = await app.ainvoke(initial_state)
 

@@ -78,7 +78,7 @@ The agent uses a **StateGraph (LangGraph)** to process queries through a dynamic
 
 ## Usage Examples
 
-- *"¿Qué es tendencia en México?"*
+- *"What's trending in Mexico?"*
 - *"Show me global trends on X today"*
 - *"What's happening in Spain?"*
 
