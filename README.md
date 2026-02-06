@@ -1,8 +1,8 @@
 # X Trends Agent - Built with LangGraph & Agent Stack SDK
 
-## Introduction
+## About
 
-The X Trends Agent is an AI-powered conversational system designed to analyze trending topics on X (formerly Twitter). Built using **LangGraph** for orchestration and the **Agent Stack SDK**, it specializes in identifying trending topics by country, researching the context behind each trend, and providing friendly, engaging summaries with emojis and source citations.
+This Agent is an AI-powered conversational tool for accessing trends on X. It is built using **LangGraph** for orchestration and the **Agent Stack SDK**, specializing in identifying trending topics by country, researching the context behind each trend, and providing friendly, engaging summaries with emojis and source citations.
 
 The agent is designed to run entirely locally using **Ollama** and the **IBM Granite 4** model.
 
@@ -84,7 +84,7 @@ The agent uses a **StateGraph (LangGraph)** to process queries through a dynamic
 
 ## Project Structure
 
-- `src/beeai_agents/agent.py`: Main logic of the agent, including the LangGraph definition and A2A server.
+- `src/langgraph_agents/agent.py`: Main logic of the agent, including the LangGraph definition and A2A server.
 - `pyproject.toml`: Dependency and script definitions.
 
 ## Disclaimer

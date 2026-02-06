@@ -249,35 +249,6 @@ wheels = [
 ]
 
 [[package]]
-name = "beeai-agents"
-version = "0.1.1"
-source = { editable = "." }
-dependencies = [
-    { name = "agentstack-sdk" },
-    { name = "beeai-framework" },
-    { name = "ddgs" },
-    { name = "google-adk" },
-    { name = "langchain" },
-    { name = "langchain-community" },
-    { name = "langchain-ollama" },
-    { name = "langchain-openai" },
-    { name = "langgraph" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "agentstack-sdk", specifier = "==0.4.0rc1" },
-    { name = "beeai-framework", specifier = ">=0.1.68" },
-    { name = "ddgs", specifier = ">=9.10.0" },
-    { name = "google-adk", specifier = ">=1.24.1" },
-    { name = "langchain", specifier = ">=1.2.9" },
-    { name = "langchain-community", specifier = ">=0.4.1" },
-    { name = "langchain-ollama", specifier = ">=1.0.1" },
-    { name = "langchain-openai", specifier = ">=1.1.7" },
-    { name = "langgraph", specifier = ">=1.0.8" },
-]
-
-[[package]]
 name = "beeai-framework"
 version = "0.1.68"
 source = { registry = "https://pypi.org/simple" }
@@ -1934,6 +1905,35 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ca/49/e9551965d8a44dd9afdc55cbcdc5a9bd18bee6918cc2395b225d40adb77c/langgraph-1.0.8.tar.gz", hash = "sha256:2630fc578846995114fd659f8b14df9eff5a4e78c49413f67718725e88ceb544", size = 498708, upload-time = "2026-02-06T12:31:13.776Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9a/72/b0d7fc1007821a08dfc03ce232f39f209aa4aa46414ea3d125b24e35093a/langgraph-1.0.8-py3-none-any.whl", hash = "sha256:da737177c024caad7e5262642bece4f54edf4cba2c905a1d1338963f41cf0904", size = 158144, upload-time = "2026-02-06T12:31:12.489Z" },
+]
+
+[[package]]
+name = "langgraph-agents"
+version = "0.1.1"
+source = { editable = "." }
+dependencies = [
+    { name = "agentstack-sdk" },
+    { name = "beeai-framework" },
+    { name = "ddgs" },
+    { name = "google-adk" },
+    { name = "langchain" },
+    { name = "langchain-community" },
+    { name = "langchain-ollama" },
+    { name = "langchain-openai" },
+    { name = "langgraph" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "agentstack-sdk", specifier = "==0.4.0rc1" },
+    { name = "beeai-framework", specifier = ">=0.1.68" },
+    { name = "ddgs", specifier = ">=9.10.0" },
+    { name = "google-adk", specifier = ">=1.24.1" },
+    { name = "langchain", specifier = ">=1.2.9" },
+    { name = "langchain-community", specifier = ">=0.4.1" },
+    { name = "langchain-ollama", specifier = ">=1.0.1" },
+    { name = "langchain-openai", specifier = ">=1.1.7" },
+    { name = "langgraph", specifier = ">=1.0.8" },
 ]
 
 [[package]]
